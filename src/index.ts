@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import orderRouter from '@/routes/orderRouter';
+import recipesRouter from '@/routes/recipesRouter';
 import ingredientRouter from '@/routes/ingredientsRouter';
 import { consumerService } from '@/services/consumer';
 import { producerService } from './services/producer';
@@ -15,6 +16,7 @@ app.use(cors());
 
 app.use('/', orderRouter);
 app.use('/ingredients', ingredientRouter);
+app.use('/recipes', recipesRouter);
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);

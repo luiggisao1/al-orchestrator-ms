@@ -34,7 +34,11 @@ class Producer {
     }
   }
 
-  async sendToQueue<T>(queue: string, message: Buffer): Promise<T | undefined> {
+  async sendToQueue<T>(
+    queue: string,
+    message: Buffer,
+    headers?: { [key: string]: any },
+  ): Promise<T | undefined> {
     if (!this._channel) {
       await this._createChannel();
     }
@@ -45,6 +49,7 @@ class Producer {
       const properties = {
         correlationId: uuid,
         replyTo: 'reply_queue',
+        headers: headers,
       };
 
       this._channel?.sendToQueue(queue, message, properties) ?? false;
