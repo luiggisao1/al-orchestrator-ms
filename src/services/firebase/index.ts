@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { firebaseDataBaseConfig } from './config';
 
-import { NotifyMessageContent } from '@/models/types';
+import { NotifyMessageContent, OrderStatus } from '@/models/types';
 import { getDatabase, set, ref, update } from 'firebase/database';
 
 type FirebaseApp = ReturnType<typeof initializeApp>;
@@ -15,7 +15,7 @@ class FirebaseRealTimeDatabase {
     this._db = getDatabase(this._firebase);
   }
 
-  async updateOrderItem(content: NotifyMessageContent): Promise<void> {
+  async handleOrder(content: NotifyMessageContent): Promise<void> {
     switch (content.status) {
       case 'pending':
         await this.createOrderItem(
@@ -24,10 +24,21 @@ class FirebaseRealTimeDatabase {
           content.dishId!,
         );
         break;
+      case 'preparing':
       case 'completed':
-        this.completeOrderItem(content.orderItemId!);
+      case 'waiting':
+        this.updateOrder(content.orderId, content.status);
         break;
+      default:
+        console.error(`Unknown order item status: ${content.status}`);
     }
+  }
+
+  async updateOrder(orderId: string, status: OrderStatus): Promise<void> {
+    return update(ref(this._db, `orders/${orderId}`), {
+      status: status,
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   async updateIngredient(content: NotifyMessageContent): Promise<void> {
@@ -63,7 +74,7 @@ class FirebaseRealTimeDatabase {
     const ingredientId = content.ingredient?.id;
 
     await update(ref(this._db, `ingredients/${ingredientId}`), {
-      status: 'completed',
+      status: 'pending',
       stock: content.ingredient?.stock ?? 0,
       updatedAt: new Date().toISOString(),
     });
@@ -84,13 +95,6 @@ class FirebaseRealTimeDatabase {
     };
 
     await set(ref(this._db, `orders/${orderItemId}`), orderItem);
-  }
-
-  async completeOrderItem(orderItemId: string): Promise<void> {
-    update(ref(this._db, `orders/${orderItemId}`), {
-      status: 'completed',
-      updatedAt: new Date().toISOString(),
-    });
   }
 }
 

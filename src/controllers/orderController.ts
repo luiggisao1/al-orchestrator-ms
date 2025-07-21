@@ -1,19 +1,44 @@
 import { Request, Response } from 'express';
 import { producerService } from '@/services/producer';
 
+export const getOrderById = async (
+  req: Request<{ orderId: string }>,
+  res: Response,
+): Promise<void> => {
+  const { orderId } = req.params;
+  const message = Buffer.from(JSON.stringify({ orderId }));
+
+  const result = await producerService.sendToQueue(
+    'kitchen_rpc_queue',
+    message,
+    { function: 'orders-get' },
+  );
+
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    res.status(404).json({
+      error: `Order with ID ${orderId} not found.`,
+    });
+  }
+};
+
 export const generateOrder = async (
-  req: Request<{}, {}, { quantity: number }>,
+  req: Request<{}, {}, { quantity: number; recipeId?: number }>,
   res: Response,
 ): Promise<void> => {
   const quantity = req.body.quantity || 1;
-  const message = Buffer.from(JSON.stringify({ quantity }));
+  const message = Buffer.from(
+    JSON.stringify({ quantity, recipeId: req.body.recipeId }),
+  );
 
-  const result = await producerService.publishMessage('order.created', message);
-
+  const result = await producerService.sendToQueue(
+    'kitchen_rpc_queue',
+    message,
+    { function: 'orders-generate' },
+  );
   if (result) {
-    res.status(201).json({
-      message: `Order with quantity ${quantity} has been sent to the kitchen.`,
-    });
+    res.status(201).json(result);
   } else {
     res.status(500).json({
       error: 'Failed to send order to the kitchen.',

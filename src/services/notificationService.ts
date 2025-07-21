@@ -5,7 +5,7 @@ class NotificationService {
   async notify(message: NotifyMessageContent): Promise<void> {
     switch (message.type) {
       case 'orderItem':
-        await firebaseRealTimeDatabase.updateOrderItem(message);
+        await firebaseRealTimeDatabase.handleOrder(message);
         break;
       case 'ingredient':
         await firebaseRealTimeDatabase.updateIngredient(message);

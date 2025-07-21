@@ -4,7 +4,7 @@ export type NotifyMessageContent = {
   dishId?: string;
   ingredient?: Ingredient;
   type: 'orderItem' | 'order' | 'ingredient';
-  status: 'pending' | 'completed';
+  status: OrderStatus;
 };
 
 export type Ingredient = {
@@ -12,3 +12,5 @@ export type Ingredient = {
   name: string;
   stock: number;
 };
+
+export type OrderStatus = 'pending' | 'completed' | 'waiting' | 'preparing';

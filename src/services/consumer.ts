@@ -51,7 +51,6 @@ class ConsumerService {
           );
 
           await notificationService.notify(content);
-          console.log('Done processing');
           this._channel?.ack(msg);
         }
       },

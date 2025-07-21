@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import {
+  getOrderById,
   generateOrder,
   getTotalOrders,
   getTotalOrdersCompleted,
@@ -9,9 +10,10 @@ import {
 
 const router = Router();
 
-router.post('/order', generateOrder);
-router.get('/order/completed', getTotalOrdersCompleted);
-router.get('/order/total', getTotalOrders);
+router.post('/orders', generateOrder);
+router.get('/order/:orderId', getOrderById);
+router.get('/orders/completed', getTotalOrdersCompleted);
+router.get('/orders/total', getTotalOrders);
 router.get('/market/total', getTotalPurchaseOrders);
 
 export default router;
