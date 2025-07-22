@@ -108,3 +108,42 @@ export const getTotalPurchaseOrders = async (
     });
   }
 };
+
+export const getMarketOrders = async (
+  _: Request,
+  res: Response,
+): Promise<void> => {
+  const message = Buffer.from(JSON.stringify({}));
+
+  const result = await producerService.sendToQueue(
+    'warehouse_rpc_queue',
+    message,
+    { function: 'market-orders' },
+  );
+
+  if (result) {
+    res.status(201).json(result);
+  } else {
+    res.status(500).json({
+      error: 'Failed to send order to the kitchen.',
+    });
+  }
+};
+
+export const getOrders = async (_: Request, res: Response): Promise<void> => {
+  const message = Buffer.from(JSON.stringify({}));
+
+  const result = await producerService.sendToQueue(
+    'kitchen_rpc_queue',
+    message,
+    { function: 'orders-data' },
+  );
+
+  if (result) {
+    res.status(201).json(result);
+  } else {
+    res.status(500).json({
+      error: 'Failed to send order to the kitchen.',
+    });
+  }
+};

@@ -8,7 +8,7 @@ class NotificationService {
         await firebaseRealTimeDatabase.handleOrder(message);
         break;
       case 'ingredient':
-        await firebaseRealTimeDatabase.updateIngredient(message);
+        await firebaseRealTimeDatabase.handleIngredient(message);
         break;
       default:
         console.error(`Unknown message type: ${message.type}`);

@@ -40,8 +40,6 @@ class ConsumerService {
       await this._createChannel();
     }
 
-    console.log(' [*] Waiting for messages in NOTIFY. To exit press CTRL+C');
-
     this._channel?.consume(
       'notify_queue',
       async (msg) => {

@@ -29,7 +29,7 @@ export const purchaseIngredient = async (
       quantityRequired: req.body.quantity,
     }),
   );
-  const result = await producerService.sendToQueue<Ingredient>(
+  const result = await producerService.sendToQueue(
     'warehouse_rpc_queue',
     message,
     { function: 'ingredient-purchase' },

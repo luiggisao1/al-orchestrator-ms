@@ -13,4 +13,9 @@ export type Ingredient = {
   stock: number;
 };
 
-export type OrderStatus = 'pending' | 'completed' | 'waiting' | 'preparing';
+export type OrderStatus =
+  | 'pending'
+  | 'completed'
+  | 'waiting'
+  | 'preparing'
+  | 'created';

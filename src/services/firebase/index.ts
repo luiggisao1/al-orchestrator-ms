@@ -24,13 +24,9 @@ class FirebaseRealTimeDatabase {
           content.dishId!,
         );
         break;
-      case 'preparing':
-      case 'completed':
-      case 'waiting':
+      default:
         this.updateOrder(content.orderId, content.status);
         break;
-      default:
-        console.error(`Unknown order item status: ${content.status}`);
     }
   }
 
@@ -41,10 +37,10 @@ class FirebaseRealTimeDatabase {
     });
   }
 
-  async updateIngredient(content: NotifyMessageContent): Promise<void> {
+  async handleIngredient(content: NotifyMessageContent): Promise<void> {
     switch (content.status) {
-      case 'pending':
-        await this.createIngredient(content);
+      case 'created':
+        await this.createPurchaseIngredient(content);
         break;
       case 'completed':
         await this.completeIngredient(content);
@@ -54,27 +50,23 @@ class FirebaseRealTimeDatabase {
     }
   }
 
-  async createIngredient(content: NotifyMessageContent): Promise<void> {
+  async createPurchaseIngredient(content: NotifyMessageContent): Promise<void> {
     const ingredientItem = {
-      id: content.ingredient?.id,
-      status: 'pending',
+      id: content.orderId,
+      ingredientId: content.ingredient?.id,
+      status: 'created',
       name: content.ingredient?.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       stock: content.ingredient?.stock ?? 0,
     };
 
-    await set(
-      ref(this._db, `ingredients/${content.ingredient?.id}`),
-      ingredientItem,
-    );
+    await set(ref(this._db, `market/${content.orderId}`), ingredientItem);
   }
 
   async completeIngredient(content: NotifyMessageContent): Promise<void> {
-    const ingredientId = content.ingredient?.id;
-
-    await update(ref(this._db, `ingredients/${ingredientId}`), {
-      status: 'pending',
+    await update(ref(this._db, `market/${content.orderId}`), {
+      status: 'completed',
       stock: content.ingredient?.stock ?? 0,
       updatedAt: new Date().toISOString(),
     });

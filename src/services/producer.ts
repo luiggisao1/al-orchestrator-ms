@@ -44,7 +44,6 @@ class Producer {
     }
     try {
       const uuid = randomUUID();
-      console.log('the correlation id is ', uuid);
 
       const properties = {
         correlationId: uuid,
