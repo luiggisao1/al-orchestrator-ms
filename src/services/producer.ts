@@ -7,7 +7,8 @@ class Producer {
   private _eventEmitter?: EventEmitter;
 
   async _createChannel(): Promise<void> {
-    const url = process.env.AMQP_URL || 'amqp://localhost';
+    const host = process.env.AMQP_HOST || 'localhost';
+    const url = `amqp://${host}`;
     const connection: ChannelModel = await connect(url);
     this._channel = await connection.createChannel();
   }

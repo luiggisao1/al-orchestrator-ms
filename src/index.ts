@@ -21,8 +21,12 @@ app.use('/recipes', recipesRouter);
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
   const eventEmitter = new EventEmitter();
-  await consumerService.initialize(eventEmitter);
-  await producerService.initialize(eventEmitter);
+  try {
+    await consumerService.initialize(eventEmitter);
+    await producerService.initialize(eventEmitter);
+  } catch (error) {
+    console.error('Error initializing the server:', error);
+  }
 });
 
 export default app;
