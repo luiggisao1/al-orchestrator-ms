@@ -1,9 +1,9 @@
 import cors from 'cors';
 import express from 'express';
-import orderRouter from '@/routes/orderRouter';
-import recipesRouter from '@/routes/recipesRouter';
-import ingredientRouter from '@/routes/ingredientsRouter';
-import { consumerService } from '@/services/consumer';
+import orderRouter from './routes/orderRouter';
+import recipesRouter from './routes/recipesRouter';
+import ingredientRouter from './routes/ingredientsRouter';
+import { consumerService } from './services/consumer';
 import { producerService } from './services/producer';
 import EventEmitter from 'events';
 

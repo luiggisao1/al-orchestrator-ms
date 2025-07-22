@@ -1,5 +1,5 @@
-import { NotifyMessageContent } from '@/models/types';
-import { firebaseRealTimeDatabase } from '@/services/firebase';
+import { NotifyMessageContent } from '../models/types';
+import { firebaseRealTimeDatabase } from './firebase';
 
 class NotificationService {
   async notify(message: NotifyMessageContent): Promise<void> {

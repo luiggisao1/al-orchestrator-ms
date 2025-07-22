@@ -8,7 +8,7 @@ import {
   getTotalOrdersCompleted,
   getTotalPurchaseOrders,
   getMarketOrders,
-} from '@/controllers/orderController';
+} from '../controllers/orderController';
 
 const router = Router();
 

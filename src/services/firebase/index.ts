@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { firebaseDataBaseConfig } from './config';
 
-import { NotifyMessageContent, OrderStatus } from '@/models/types';
+import { NotifyMessageContent, OrderStatus } from '../../models/types';
 import { getDatabase, set, ref, update } from 'firebase/database';
 
 type FirebaseApp = ReturnType<typeof initializeApp>;

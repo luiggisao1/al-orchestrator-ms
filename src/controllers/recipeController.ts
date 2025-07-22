@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { producerService } from '@/services/producer';
-import { Ingredient } from '@/models/types';
+import { producerService } from '../services/producer';
+import { Ingredient } from '../models/types';
 
 export const getRecipes = async (_: Request, res: Response): Promise<void> => {
   const message = Buffer.from(JSON.stringify({}));

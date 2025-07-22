@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { producerService } from '@/services/producer';
+import { producerService } from '../services/producer';
 
 export const getOrderById = async (
   req: Request<{ orderId: string }>,
