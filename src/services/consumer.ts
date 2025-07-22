@@ -12,15 +12,12 @@ class ConsumerService {
     if (!this.isInitialized) {
       this._eventEmitter = eventEmitter;
       await this._createChannel();
-      await this._channel?.assertExchange(
-        process.env.AMQP_EXCHANGE_NAME_ORDERS || 'exchange',
-        'topic',
-      );
+      await this._channel?.assertExchange('orders_exchange', 'topic');
       await this._channel?.assertQueue('reply_queue', { durable: true });
       await this._channel?.assertQueue('notify_queue', { durable: true });
       await this._channel?.bindQueue(
         'notify_queue',
-        process.env.AMQP_EXCHANGE_NAME_ORDERS || 'exchange',
+        'orders_exchange',
         'notify.*',
       );
       this.isInitialized = true;
