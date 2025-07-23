@@ -15,6 +15,10 @@ class FirebaseRealTimeDatabase {
     this._db = getDatabase(this._firebase);
   }
 
+  get defaultPath(): string {
+    return process.env.FIREBASE_BASE_PATH || 'default';
+  }
+
   async handleOrder(content: NotifyMessageContent): Promise<void> {
     switch (content.status) {
       case 'pending':
@@ -31,7 +35,7 @@ class FirebaseRealTimeDatabase {
   }
 
   async updateOrder(orderId: string, status: OrderStatus): Promise<void> {
-    return update(ref(this._db, `orders/${orderId}`), {
+    return update(ref(this._db, `${this.defaultPath}/orders/${orderId}`), {
       status: status,
       updatedAt: new Date().toISOString(),
     });
@@ -61,15 +65,21 @@ class FirebaseRealTimeDatabase {
       stock: content.ingredient?.stock ?? 0,
     };
 
-    await set(ref(this._db, `market/${content.orderId}`), ingredientItem);
+    await set(
+      ref(this._db, `${this.defaultPath}/market/${content.orderId}`),
+      ingredientItem,
+    );
   }
 
   async completeIngredient(content: NotifyMessageContent): Promise<void> {
-    await update(ref(this._db, `market/${content.orderId}`), {
-      status: 'completed',
-      stock: content.ingredient?.stock ?? 0,
-      updatedAt: new Date().toISOString(),
-    });
+    await update(
+      ref(this._db, `${this.defaultPath}/market/${content.orderId}`),
+      {
+        status: 'completed',
+        stock: content.ingredient?.stock ?? 0,
+        updatedAt: new Date().toISOString(),
+      },
+    );
   }
 
   async createOrderItem(
@@ -86,7 +96,10 @@ class FirebaseRealTimeDatabase {
       updatedAt: new Date().toISOString(),
     };
 
-    await set(ref(this._db, `orders/${orderItemId}`), orderItem);
+    await set(
+      ref(this._db, `${this.defaultPath}/orders/${orderItemId}`),
+      orderItem,
+    );
   }
 }
 

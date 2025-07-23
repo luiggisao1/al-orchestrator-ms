@@ -7,7 +7,7 @@ services:
       - '3000:3000'
     environment:
       AMQP_URL: amqp://guest:guest@rabbitmq:5672
-      RABBITMQ_PORT: 5672
+      FIREBASE_BASE_PATH: al/test
     depends_on:
       rabbitmq:
         condition: service_healthy
