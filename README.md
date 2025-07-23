@@ -53,10 +53,6 @@ This will:
 
 The service should now be accessible at the configured port (default: 3000).
 
-## API Documentation
-
-[Include API endpoints, request/response formats, etc.]
-
 ## Dependencies
 
 - RabbitMQ
@@ -74,7 +70,7 @@ This service handles food preparation and cooking processes.
 
 ```bash
 git clone https://github.com/luiggisao1/alegra-kitchen
-cd al-kitchen-ms
+cd alegra-kitchen
 docker compose up --build
 ```
 
@@ -84,7 +80,7 @@ This service manages product inventory, stock levels, and supply chain operation
 
 ```bash
 git clone https://github.com/luiggisao1/alegra-warehouse
-cd al-warehouse-ms
+cd alegra-warehouse
 docker compose up --build
 ```
 
